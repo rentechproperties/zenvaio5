@@ -3,6 +3,7 @@ import { FloatingButtons } from '@/components/floating-buttons'
 import { HeroSection } from '@/components/sections/hero'
 import { VoiceDemoSection } from '@/components/sections/voice-demo'
 import { LostRevenueSection } from '@/components/sections/lost-revenue'
+import { ROISection } from '@/components/sections/roi-section'
 import { IndustrySelectorSection } from '@/components/sections/industry-selector'
 import { HowItWorksSection } from '@/components/sections/how-it-works'
 import { FeaturesGridSection } from '@/components/sections/features-grid'
@@ -21,6 +22,7 @@ export default function Home() {
       <HeroSection />
       <VoiceDemoSection />
       <LostRevenueSection />
+      <ROISection />
       <IndustrySelectorSection />
       <HowItWorksSection />
       <FeaturesGridSection />
