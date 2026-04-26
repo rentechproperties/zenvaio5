@@ -68,7 +68,7 @@ export function HeroSection() {
                   ))}
                 </div>
                 <span className="text-white/50 text-sm font-medium uppercase tracking-wide">
-                  Trusted by 52+ Companies Worldwide
+                  Trusted by 22+ Companies Worldwide
                 </span>
               </div>
             </div>

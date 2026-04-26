@@ -1,64 +1,101 @@
 "use client"
 
-// Exact companies as specified - in order
+import { useEffect, useRef } from 'react'
+
 const companies = [
-  "Stella Developers",
-  "MH Builders Lab",
-  "NeuroBridge",
-  "North",
-  "Elva",
-  "2WAI",
-  "Osmow's Shawarma",
-  "BookRetreats",
-  "Ski With Ease",
-  "Uphill Growth",
-  "Totality Ventures",
-  "Elvaco",
-  "Nexus AI Solutions",
-  "Velora Health",
-  "Skyline Robotics",
-  "PrimeLogix",
-  "Apex Financial AI",
-  "Crest Education",
-  "BlueDot Real Estate",
-  "Verge Logistics",
-  "Lumina Retail",
-  "Fortis Manufacturing",
+  { name: "Stella Developers", color: "#1B6FFF", bg: "#EFF6FF", icon: "🏗️" },
+  { name: "MH Builders Lab", color: "#7C3AED", bg: "#F5F3FF", icon: "🔧" },
+  { name: "NeuroBridge", color: "#0891B2", bg: "#ECFEFF", icon: "🧠" },
+  { name: "North", color: "#059669", bg: "#ECFDF5", icon: "🧭" },
+  { name: "Elva", color: "#DC2626", bg: "#FEF2F2", icon: "⚡" },
+  { name: "2WAI", color: "#D97706", bg: "#FFFBEB", icon: "🤖" },
+  { name: "Osmow's Shawarma", color: "#EA580C", bg: "#FFF7ED", icon: "🥙" },
+  { name: "BookRetreats", color: "#0284C7", bg: "#F0F9FF", icon: "🏕️" },
+  { name: "Ski With Ease", color: "#7C3AED", bg: "#F5F3FF", icon: "⛷️" },
+  { name: "Uphill Growth", color: "#059669", bg: "#ECFDF5", icon: "📈" },
+  { name: "Totality Ventures", color: "#1B6FFF", bg: "#EFF6FF", icon: "💼" },
+  { name: "Elvaco", color: "#0891B2", bg: "#ECFEFF", icon: "🔬" },
+  { name: "Nexus AI Solutions", color: "#7C3AED", bg: "#F5F3FF", icon: "🕸️" },
+  { name: "Velora Health", color: "#DC2626", bg: "#FEF2F2", icon: "🏥" },
+  { name: "Skyline Robotics", color: "#0284C7", bg: "#F0F9FF", icon: "🤖" },
+  { name: "PrimeLogix", color: "#D97706", bg: "#FFFBEB", icon: "📦" },
+  { name: "Apex Financial AI", color: "#059669", bg: "#ECFDF5", icon: "💹" },
+  { name: "Crest Education", color: "#1B6FFF", bg: "#EFF6FF", icon: "🎓" },
+  { name: "BlueDot Real Estate", color: "#0891B2", bg: "#ECFEFF", icon: "🏠" },
+  { name: "Verge Logistics", color: "#EA580C", bg: "#FFF7ED", icon: "🚚" },
+  { name: "Lumina Retail", color: "#7C3AED", bg: "#F5F3FF", icon: "🛍️" },
+  { name: "Fortis Manufacturing", color: "#DC2626", bg: "#FEF2F2", icon: "🏭" },
 ]
 
-// Generate initials for company badge
-function getInitials(name: string): string {
-  const words = name.split(' ')
-  if (words.length === 1) {
-    return name.slice(0, 2).toUpperCase()
-  }
-  return words.slice(0, 2).map(w => w[0]).join('').toUpperCase()
-}
-
 export function LegacyTicker() {
-  // Duplicate for seamless loop
-  const allCompanies = [...companies, ...companies]
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    let x = 0
+    let animId: number
+    const speed = 0.5
+
+    const step = () => {
+      x -= speed
+      const half = track.scrollWidth / 2
+      if (Math.abs(x) >= half) x = 0
+      track.style.transform = `translateX(${x}px)`
+      animId = requestAnimationFrame(step)
+    }
+
+    animId = requestAnimationFrame(step)
+
+    const pause = () => cancelAnimationFrame(animId)
+    const resume = () => { animId = requestAnimationFrame(step) }
+    track.addEventListener('mouseenter', pause)
+    track.addEventListener('mouseleave', resume)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      track.removeEventListener('mouseenter', pause)
+      track.removeEventListener('mouseleave', resume)
+    }
+  }, [])
+
+  const all = [...companies, ...companies]
 
   return (
-    <div className="w-full bg-white border-t border-b border-[#E2E8F0] py-6">
-      {/* Auto-Scrolling Marquee */}
-      <div className="relative overflow-hidden">
-        <div className="marquee-track flex items-center">
-          {allCompanies.map((name, i) => (
-            <div key={i} className="flex items-center flex-shrink-0">
-              {/* Company Entry */}
-              <div className="flex items-center gap-3 px-4">
-                {/* Logo Badge - Square pill with initials */}
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F1F5F9] text-xs font-bold text-[#0F172A]">
-                  {getInitials(name)}
-                </div>
-                {/* Company Name */}
-                <span className="text-sm font-medium text-[#0F172A] whitespace-nowrap">
-                  {name}
+    <div className="w-full border-t border-b border-[#E2E8F0] bg-white py-5 overflow-hidden">
+      <p className="text-center text-xs font-semibold uppercase tracking-widest text-[#94A3B8] mb-4">
+        Trusted by innovative companies across North America
+      </p>
+      <div className="overflow-hidden">
+        <div ref={trackRef} className="flex items-center gap-4" style={{ willChange: 'transform' }}>
+          {all.map((company, i) => (
+            <div
+              key={i}
+              className="flex-shrink-0 flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 shadow-sm hover:shadow-md hover:border-[#1B6FFF]/30 transition-all duration-200 cursor-default"
+              style={{ minWidth: 'max-content' }}
+            >
+              {/* Icon logo */}
+              <div
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-lg flex-shrink-0"
+                style={{ background: company.bg }}
+              >
+                <span role="img" aria-label={company.name} style={{ fontSize: '18px', lineHeight: 1 }}>
+                  {company.icon}
                 </span>
               </div>
-              {/* Separator Dot */}
-              <span className="text-[#CBD5E1] mx-2">·</span>
+              {/* Name */}
+              <span
+                className="text-sm font-semibold whitespace-nowrap"
+                style={{ color: '#0F172A' }}
+              >
+                {company.name}
+              </span>
+              {/* Colored dot accent */}
+              <div
+                className="h-1.5 w-1.5 rounded-full flex-shrink-0"
+                style={{ background: company.color }}
+              />
             </div>
           ))}
         </div>
